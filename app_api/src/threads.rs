@@ -6,6 +6,7 @@ use diesel::prelude::*;
 #[get("/")]
 async fn get_posts(data: web::Data<AppState>) -> web::Json<Vec<Post>> {
     use crate::schema::posts::dsl::*;
+    println!("Getting all posts...");
 
     let mut connection = data.database.get().unwrap();
     let all_posts = posts.filter(published.eq(0)).load::<Post>(&mut connection).expect("Error loading posts.");
@@ -14,11 +15,11 @@ async fn get_posts(data: web::Data<AppState>) -> web::Json<Vec<Post>> {
 }
 
 #[get("/{id}")]
-async fn get_post_by_id(data: web::Data<AppState>, arg: web::Path<i32>) -> web::Json<Post> {
+async fn get_post_by_id(data: web::Data<AppState>, path: web::Path<i32>) -> web::Json<Post> {
     use crate::schema::posts::dsl::*;
 
     let mut connection = data.database.get().unwrap();
-    let post_id = arg.into_inner();
+    let post_id = path.into_inner();
     let all_posts = posts.filter(id.eq(post_id)).load::<Post>(&mut connection).expect("Error loading post");
     let query_post = &all_posts[0];
 

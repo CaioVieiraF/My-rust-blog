@@ -1,12 +1,13 @@
 [package]
-name = "app_api"
+name = "app_web"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = "4.3.1"
-diesel = { version="2.0.3", features=["r2d2", "sqlite"] }
-dotenvy = "0.15.6"
+gloo-net = "0.2.6"
 serde = { version="1.0.152", features=["derive"] }
+wasm-bindgen-futures = "0.4.34"
+# tokio = { version="1.26.0", features=["full"] }
+yew = { version = "0.20.0", features = ["csr"] }
