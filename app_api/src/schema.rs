@@ -2,7 +2,7 @@
 
 diesel::table! {
     posts (id) {
-        id -> Integer,
+        id -> Text,
         title -> Text,
         body -> Text,
         published -> Integer,

@@ -1,34 +1,11 @@
+mod components;
+
 use yew::prelude::*;
 use gloo_net::http::Request;
-use serde::{Deserialize, Serialize};
 use wasm_bindgen_futures;
+use components::{Post, PostProps, PageInfo};
 
-#[derive(PartialEq, Properties)]
-struct PostProps {
-    title: String,
-    body: String,
-}
-
-#[derive(Deserialize, Serialize, Clone, Debug)]
-struct Post {
-    id: i32,
-    title: String,
-    body: String,
-    published: u8,
-}
-
-#[function_component(PostThread)]
-fn post_hread(props: &PostProps) -> Html {
-    let body = props.body.clone();
-    let title = props.title.clone();
-    println!("{body} {title}");
-    html! {
-        <div>
-            <h3>{ title }</h3>
-            <p>{ body }</p>
-        </div>
-    }
-}
+pub enum Msg {}
 
 #[function_component(App)]
 fn app() -> Html {
@@ -47,18 +24,24 @@ fn app() -> Html {
         }, ());
     }
 
-    println!("{:?}", posts);
-
     html! {
-        <div>
-            {
-            (*posts).clone().into_iter().map(|post| {
-                let props = PostProps { title: post.title, body: post.body };
+        <main class="container">
+            <div class="row">
+                <div class="col-9">
+                    {
+                    (*posts).clone().into_iter().filter(|p| p.published() == 1).map(|post| {
 
-                html! {<PostThread ..props />}
-            }).collect::<Html>()
-            }
-        </div>
+
+                        let props = PostProps::new(post.title(), post.body(), post.published());
+
+                        html! {<Post ..props />}
+                    }).collect::<Html>()
+                    }
+                </div>
+
+                <PageInfo />
+            </div>
+        </main>
     }
 }
 
